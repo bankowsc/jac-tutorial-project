@@ -1,3 +1,10 @@
+Carter Bankowski
+4930 2098
+
+Added a Lightmode Darkmode toggle button
+
+
+
 # my-todo-app
 
 A Jac client-side application with React support.
