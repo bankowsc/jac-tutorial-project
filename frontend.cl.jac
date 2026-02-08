@@ -8,6 +8,7 @@ import from .components.TodoItem { TodoItem }
 import from .components.AuthForm { AuthForm }
 import from .components.IngredientItem { IngredientItem }
 
+
 sv import from main {
     AddTodo, ListTodos, ToggleTodo, DeleteTodo,
     GenerateShoppingList, ListMealPlan, ClearMealPlan
@@ -27,10 +28,15 @@ def:pub app -> any {
         mealInput: str = "",
         ingredients: list = [],
         ingredientsLoading: bool = False;
+        has theme: str = "dark";
+        def toggleTheme -> None;
+
 
     can with entry {
         isLoggedIn = jacIsLoggedIn();
         checkingAuth = False;
+
+        document.documentElement.className = theme;
     }
 
     can with [isLoggedIn] entry {
@@ -196,6 +202,37 @@ def:pub app -> any {
                         </div>
                     </div>
                 </div>
+
+
+                <div className="card-header">
+                    <div>
+                        <h1 className="app-title">TaskFlow</h1>
+                        <p className="app-subtitle">
+                            Todo list with AI meal planning
+                        </p>
+                    </div>
+
+                    <div className="header-actions">
+                        <button
+                            onClick={lambda -> None { toggleTheme(); }}
+                            className="btn-theme-toggle"
+                        >
+                            <span className="theme-icon">
+                                {("🌙" if theme == "dark" else "☀️")}
+                            </span>
+                            <span className="theme-label">
+                                {("Dark" if theme == "dark" else "Light")}
+                            </span>
+                        </button>
+
+                        <button onClick={handleLogout} className="btn-signout">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+
+
+
             </div>;
     }
 

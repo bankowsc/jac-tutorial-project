@@ -1,5 +1,15 @@
 """Implementations for the Todo App frontend component."""
 
+impl app.toggleTheme -> None {
+    if theme == "dark" {
+        theme = "light";
+        document.documentElement.className = "light";
+    } else {
+        theme = "dark";
+        document.documentElement.className = "dark";
+    }
+}
+
 impl app.fetchTodos -> None {
     todosLoading = True;
     result = root spawn ListTodos();
