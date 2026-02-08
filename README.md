@@ -1,7 +1,16 @@
 Carter Bankowski
 4930 2098
 
-Added a Lightmode Darkmode toggle button
+Added a Lightmode Darkmode toggle button. When clicked, will swap light mode and dark mode themes on page. The site defaults to dark mode. Relavant code can be found at the beginning of frontend.impl.jac lines 3-9 and frontend.cl.jac 207-232. Also, style.css now has two sets of rules one for each light and dark.
+
+
+App can be run by installing jac dependencies, setting up a gemini api key and running...
+
+$ export GOOGLE_API_KEY="the-key" --> NOTE: didnt post my actual key becuase this is a public repo
+
+then
+
+$ jac start main.jac
 
 
 
