@@ -78,6 +78,18 @@ def:pub app -> any {
                 <div className="app-content">
                     <div className="card">
                         <div className="card-header">
+                            <div className="header-actions">
+                                <button
+                                    onClick={lambda -> None { toggleTheme(); }}
+                                    className="btn-theme-toggle">
+                                    <span className="theme-icon">
+                                        {("🌙" if theme == "dark" else "☀️")}
+                                    </span>
+                                    <span className="theme-label">
+                                        {("Dark" if theme == "dark" else "Light")}
+                                    </span>
+                                </button>
+                            </div>
                             <div>
                                 <h1 className="app-title">TaskFlow</h1>
                                 <p className="app-subtitle">
@@ -136,7 +148,7 @@ def:pub app -> any {
                             <div className="remaining-count">
                                 {todos.filter(
                                     lambda t: any -> bool { return not t.completed; }
-                                ).length} items remaining
+                                ).length }  - items remaining
                             </div>
                         </div>
                         <div className="column-right">
@@ -204,35 +216,32 @@ def:pub app -> any {
                 </div>
 
 
-                <div className="card-header">
-                    <div>
-                        <h1 className="app-title">TaskFlow</h1>
-                        <p className="app-subtitle">
-                            Todo list with AI meal planning
-                        </p>
-                    </div>
+                # <div className="card-header">
+                #     # <div>
+                #     #     <h1 className="app-title">TaskFlow</h1>
+                #     #     <p className="app-subtitle">
+                #     #         Todo list with AI meal planning
+                #     #     </p>
+                #     # </div>
 
-                    <div className="header-actions">
-                        <button
-                            onClick={lambda -> None { toggleTheme(); }}
-                            className="btn-theme-toggle"
-                        >
-                            <span className="theme-icon">
-                                {("🌙" if theme == "dark" else "☀️")}
-                            </span>
-                            <span className="theme-label">
-                                {("Dark" if theme == "dark" else "Light")}
-                            </span>
-                        </button>
+                #     # <div className="header-actions">
+                #     #     <button
+                #     #         onClick={lambda -> None { toggleTheme(); }}
+                #     #         className="btn-theme-toggle"
+                #     #     >
+                #     #         <span className="theme-icon">
+                #     #             {("🌙" if theme == "dark" else "☀️")}
+                #     #         </span>
+                #     #         <span className="theme-label">
+                #     #             {("Dark" if theme == "dark" else "Light")}
+                #     #         </span>
+                #     #     </button>
 
-                        <button onClick={handleLogout} className="btn-signout">
-                            Sign Out
-                        </button>
-                    </div>
-                </div>
-
-
-
+                #     #     # <button onClick={handleLogout} className="btn-signout">
+                #     #     #     Sign Out
+                #     #     # </button>
+                #     # </div>
+                # </div>
             </div>;
     }
 
