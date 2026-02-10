@@ -1,6 +1,6 @@
 """Implementations for the Todo App frontend component."""
 
-impl app.addToFavorites(item: dict) -> None {
+impl addToFavorites(item: dict) -> None {
     """Add an item to favorites."""
     # Check if item already exists
     has exists: bool = False;
@@ -36,14 +36,14 @@ impl app.addToFavorites(item: dict) -> None {
     }
 }
 
-impl app.removeFavorite(favoriteId: str) -> None {
+impl removeFavorite(favoriteId: str) -> None {
     """Remove an item from favorites."""
     self.favorites = self.favorites.filter(
         lambda f: any -> bool { return f.id != favoriteId; }
     );
 }
 
-impl app.selectFavorite(favorite: dict) -> None {
+impl selectFavorite(favorite: dict) -> None {
     """Handle selecting a favorite item."""
     # Close the dropdown
     self.showFavoritesDropdown = False;
@@ -55,7 +55,7 @@ impl app.selectFavorite(favorite: dict) -> None {
     # self.addTodo();
 }
 
-impl app.toggleFavoriteForTodo(todoId: str) -> None {
+impl toggleFavoriteForTodo(todoId: str) -> None {
     """Toggle favorite status for a todo item."""
     # Find the todo
     has todo: any = None;
@@ -84,7 +84,7 @@ impl app.toggleFavoriteForTodo(todoId: str) -> None {
     }
 }
 
-impl app.isFavorite(todoId: str) -> bool {
+impl isFavorite(todoId: str) -> bool {
     """Check if a todo is in favorites."""
     for fav in self.favorites {
         if fav.id == todoId {
@@ -94,7 +94,7 @@ impl app.isFavorite(todoId: str) -> bool {
     return False;
 }
 
-impl app.toggleFavoritesDropdown -> None {
+impl toggleFavoritesDropdown -> None {
     """Toggle the favorites dropdown visibility."""
     self.showFavoritesDropdown = not self.showFavoritesDropdown;
 }
@@ -103,38 +103,38 @@ impl app.toggleFavoritesDropdown -> None {
 # ABOVE IS BONUS
 
 impl app.toggleTheme -> None {
-    if self.theme == "dark" {
-        self.theme = "light";
+    if theme == "dark" {
+        theme = "light";
         document.documentElement.className = "light";
     } else {
-        self.theme = "dark";
+        theme = "dark";
         document.documentElement.className = "dark";
     }
 }
 
 impl app.fetchTodos -> None {
-    self.todosLoading = True;
-    has result: any = root spawn ListTodos();
-    self.todos = result.reports[0] if result.reports else [];
-    self.todosLoading = False;
+    todosLoading = True;
+    result = root spawn ListTodos();
+    todos = result.reports[0] if result.reports else [];
+    todosLoading = False;
 }
 
 impl app.addTodo -> None {
-    if not self.newTodoText.trim() { return; }
-    has response: any = root spawn AddTodo(title=self.newTodoText);
-    has newTodo: any = response.reports[0];
-    self.todos = self.todos.concat([{
+    if not newTodoText.trim() { return; }
+    response = root spawn AddTodo(title=newTodoText);
+    newTodo = response.reports[0];
+    todos = todos.concat([{
         "id": newTodo.id,
         "title": newTodo.title,
         "completed": newTodo.completed,
         "category": newTodo.category
     }]);
-    self.newTodoText = "";
+    newTodoText = "";
 }
 
 impl app.toggleTodo(todoId: str) -> None {
     root spawn ToggleTodo(todo_id=todoId);
-    self.todos = self.todos.map(
+    todos = todos.map(
         lambda t: any -> any {
             if t.id == todoId {
                 return {
@@ -149,98 +149,98 @@ impl app.toggleTodo(todoId: str) -> None {
 
 impl app.deleteTodo(todoId: str) -> None {
     root spawn DeleteTodo(todo_id=todoId);
-    self.todos = self.todos.filter(
+    todos = todos.filter(
         lambda t: any -> bool { return t.id != todoId; }
     );
 }
 
 impl app.handleLogin -> None {
-    self.error = "";
-    if not self.username.trim() or not self.password {
-        self.error = "Please fill in all fields";
+    error = "";
+    if not username.trim() or not password {
+        error = "Please fill in all fields";
         return;
     }
-    self.loading = True;
-    has success: any = await jacLogin(self.username, self.password);
-    self.loading = False;
+    loading = True;
+    success = await jacLogin(username, password);
+    loading = False;
     if success {
-        self.isLoggedIn = True;
-        self.username = "";
-        self.password = "";
+        isLoggedIn = True;
+        username = "";
+        password = "";
     } else {
-        self.error = "Invalid username or password";
+        error = "Invalid username or password";
     }
 }
 
 impl app.handleSignup -> None {
-    self.error = "";
-    if not self.username.trim() or not self.password {
-        self.error = "Please fill in all fields";
+    error = "";
+    if not username.trim() or not password {
+        error = "Please fill in all fields";
         return;
     }
-    if self.password.length < 4 {
-        self.error = "Password must be at least 4 characters";
+    if password.length < 4 {
+        error = "Password must be at least 4 characters";
         return;
     }
-    self.loading = True;
-    has result: any = await jacSignup(self.username, self.password);
-    self.loading = False;
+    loading = True;
+    result = await jacSignup(username, password);
+    loading = False;
     if result["success"] {
-        self.isLoggedIn = True;
-        self.username = "";
-        self.password = "";
+        isLoggedIn = True;
+        username = "";
+        password = "";
     } else {
-        self.error = result["error"] if result["error"] else "Signup failed";
+        error = result["error"] if result["error"] else "Signup failed";
     }
 }
 
 impl app.handleLogout -> None {
     jacLogout();
-    self.isLoggedIn = False;
-    self.todos = [];
-    self.ingredients = [];
-    self.mealInput = "";
+    isLoggedIn = False;
+    todos = [];
+    ingredients = [];
+    mealInput = "";
 }
 
 impl app.handleSubmit(e: any) -> None {
     e.preventDefault();
-    if self.isSignup {
-        await self.handleSignup();
+    if isSignup {
+        await handleSignup();
     } else {
-        await self.handleLogin();
+        await handleLogin();
     }
 }
 
 impl app.handleTodoKeyPress(e: any) -> None {
-    if e.key == "Enter" { self.addTodo(); }
+    if e.key == "Enter" { addTodo(); }
 }
 
 impl app.fetchMealPlan -> None {
-    has result: any = root spawn ListMealPlan();
-    self.ingredients = result.reports[0] if result.reports else [];
+    result = root spawn ListMealPlan();
+    ingredients = result.reports[0] if result.reports else [];
 }
 
 impl app.generateIngredients -> None {
-    if not self.mealInput.trim() { return; }
-    self.ingredientsLoading = True;
-    has result: any = root spawn GenerateShoppingList(meal_description=self.mealInput);
-    self.ingredients = result.reports[0] if result.reports else [];
-    self.ingredientsLoading = False;
+    if not mealInput.trim() { return; }
+    ingredientsLoading = True;
+    result = root spawn GenerateShoppingList(meal_description=mealInput);
+    ingredients = result.reports[0] if result.reports else [];
+    ingredientsLoading = False;
 }
 
 impl app.clearIngredients -> None {
     root spawn ClearMealPlan();
-    self.ingredients = [];
-    self.mealInput = "";
+    ingredients = [];
+    mealInput = "";
 }
 
 impl app.handleMealKeyPress(e: any) -> None {
-    if e.key == "Enter" { self.generateIngredients(); }
+    if e.key == "Enter" { generateIngredients(); }
 }
 
 impl app.getIngredientsTotal -> float {
-    has total: float = 0.0;
-    for ing in self.ingredients {
+    total = 0.0;
+    for ing in ingredients {
         total = total + ing.cost;
     }
     return total;

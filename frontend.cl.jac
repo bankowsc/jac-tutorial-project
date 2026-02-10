@@ -8,6 +8,11 @@ import from .components.TodoItem { TodoItem }
 import from .components.AuthForm { AuthForm }
 import from .components.IngredientItem { IngredientItem }
 
+# BONUS
+import from .components.FavoritesDropdown { FavoritesDropdown }
+import from .components.TodoItemWithFavorite { TodoItemWithFavorite }
+# BONUS
+
 
 sv import from main {
     AddTodo, ListTodos, ToggleTodo, DeleteTodo,
@@ -31,6 +36,11 @@ def:pub app -> any {
         has theme: str = "dark";
         def toggleTheme -> None;
 
+        # BONUS
+        has favorites: list = [];
+        has showFavoritesDropdown: bool = False;
+        
+        # BONUS
 
     can with entry {
         isLoggedIn = jacIsLoggedIn();
@@ -61,6 +71,15 @@ def:pub app -> any {
     async def clearIngredients -> None;
     def handleMealKeyPress(e: any) -> None;
     def getIngredientsTotal -> float;
+
+    # BONUS
+    def addToFavorites(item: dict) -> None;
+    def removeFavorite(favoriteId: str) -> None;
+    def selectFavorite(favorite: dict) -> None;
+    async def toggleFavoriteForTodo(todoId: str) -> None;
+    def isFavorite(todoId: str) -> bool;
+    def toggleFavoritesDropdown -> None;
+    # END BONUS
 
     if checkingAuth {
         return
@@ -133,13 +152,15 @@ def:pub app -> any {
                                         ) if todos.length == 0 else (
                                             <div>
                                                 {[
-                                                    <TodoItem
-                                                        key={todo.id}
-                                                        todo={todo}
-                                                        onToggle={toggleTodo}
-                                                        onDelete={deleteTodo}
-                                                    /> for todo in todos
-                                                ]}
+                                                <TodoItemWithFavorite
+                                                    key={todo.id}
+                                                    todo={todo}
+                                                    onToggle={toggleTodo}
+                                                    onDelete={deleteTodo}
+                                                    onToggleFavorite={toggleFavoriteForTodo}
+                                                    isFavorite={isFavorite(todo.id)}
+                                                /> for todo in todos
+                                            ]}
                                             </div>
                                         )}
                                     </div>
@@ -215,33 +236,15 @@ def:pub app -> any {
                     </div>
                 </div>
 
+                <FavoritesDropdown
+                    favorites={self.favorites}
+                    showDropdown={self.showFavoritesDropdown}
+                    onToggle={self.toggleFavoritesDropdown}
+                    onSelectFavorite={self.selectFavorite}
+                    onAddFavorite={self.addToFavorites}
+                    onRemoveFavorite={self.removeFavorite}
+                />  
 
-                # <div className="card-header">
-                #     # <div>
-                #     #     <h1 className="app-title">TaskFlow</h1>
-                #     #     <p className="app-subtitle">
-                #     #         Todo list with AI meal planning
-                #     #     </p>
-                #     # </div>
-
-                #     # <div className="header-actions">
-                #     #     <button
-                #     #         onClick={lambda -> None { toggleTheme(); }}
-                #     #         className="btn-theme-toggle"
-                #     #     >
-                #     #         <span className="theme-icon">
-                #     #             {("🌙" if theme == "dark" else "☀️")}
-                #     #         </span>
-                #     #         <span className="theme-label">
-                #     #             {("Dark" if theme == "dark" else "Light")}
-                #     #         </span>
-                #     #     </button>
-
-                #     #     # <button onClick={handleLogout} className="btn-signout">
-                #     #     #     Sign Out
-                #     #     # </button>
-                #     # </div>
-                # </div>
             </div>;
     }
 
