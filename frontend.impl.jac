@@ -1,5 +1,22 @@
 """Implementations for the Todo App frontend component."""
 
+impl app.fetchNews -> None {
+    result = root spawn ListMealPlan();
+    ingredients = result.reports[0] if result.reports else [];
+}
+
+impl app.togglePage -> None {
+    if page == "home" {
+        page = "news";
+        # document.documentElement.className = "light";
+    } else {
+        page = "home";
+        # document.documentElement.className = "dark";
+    }
+}
+
+# Above is maybe bad
+
 impl app.toggleTheme -> None {
     if theme == "dark" {
         theme = "light";
@@ -9,6 +26,8 @@ impl app.toggleTheme -> None {
         document.documentElement.className = "dark";
     }
 }
+
+# ABOVE IS my bonus
 
 impl app.fetchTodos -> None {
     todosLoading = True;

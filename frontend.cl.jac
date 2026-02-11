@@ -28,8 +28,12 @@ def:pub app -> any {
         mealInput: str = "",
         ingredients: list = [],
         ingredientsLoading: bool = False;
-        has theme: str = "dark";
+
+        has theme: str = "dark"; # default dark mode
         def toggleTheme -> None;
+
+        has page: str = "home"; # default home page
+        def togglePage -> None;
 
 
     can with entry {
@@ -62,6 +66,9 @@ def:pub app -> any {
     def handleMealKeyPress(e: any) -> None;
     def getIngredientsTotal -> float;
 
+    async def fetchNews -> None;
+
+
     if checkingAuth {
         return
             <div style={{"display": "flex", "justifyContent": "center",
@@ -89,6 +96,17 @@ def:pub app -> any {
                                         {("Dark" if theme == "dark" else "Light")}
                                     </span>
                                 </button>
+
+                                <button
+                                    onClick={lambda -> None { togglePage(); }}
+                                    className="btn-page-toggle">
+                                    <span className="page-icon">
+                                        {("🏠" if page == "home" else "📰")}
+                                    </span>
+                                    <span className="page-label">
+                                        {("Home" if page == "home" else "News")}
+                                    </span>
+                                </button>
                             </div>
                             <div>
                                 <h1 className="app-title">TaskFlow</h1>
@@ -101,6 +119,8 @@ def:pub app -> any {
                             </button>
                         </div>
                     </div>
+
+                    {{
                     <div className="two-column-layout">
                         <div className="column-left">
                             <div className="card">
@@ -213,35 +233,23 @@ def:pub app -> any {
                             </div>
                         </div>
                     </div>
+
+                    if page == "home" else 
+                    <div className="news-header">
+                        <div className="news-text">
+                            "Welcome to News!" 
+                        </div>
+                        <div className="news-button">
+                            <button
+                                onClick={lambda -> None { fetchNews(); }}
+                                disabled={}
+                                className="btn-news"
+                            >
+                        <div>
+                    </div>
+                    }}
                 </div>
 
-
-                # <div className="card-header">
-                #     # <div>
-                #     #     <h1 className="app-title">TaskFlow</h1>
-                #     #     <p className="app-subtitle">
-                #     #         Todo list with AI meal planning
-                #     #     </p>
-                #     # </div>
-
-                #     # <div className="header-actions">
-                #     #     <button
-                #     #         onClick={lambda -> None { toggleTheme(); }}
-                #     #         className="btn-theme-toggle"
-                #     #     >
-                #     #         <span className="theme-icon">
-                #     #             {("🌙" if theme == "dark" else "☀️")}
-                #     #         </span>
-                #     #         <span className="theme-label">
-                #     #             {("Dark" if theme == "dark" else "Light")}
-                #     #         </span>
-                #     #     </button>
-
-                #     #     # <button onClick={handleLogout} className="btn-signout">
-                #     #     #     Sign Out
-                #     #     # </button>
-                #     # </div>
-                # </div>
             </div>;
     }
 

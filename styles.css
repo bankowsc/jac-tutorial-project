@@ -59,7 +59,7 @@
 .dark .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: right;
 }
 
 .dark .app-title {
@@ -977,3 +977,85 @@ html.light .btn-theme-toggle {
 .light .theme-label {
     font-weight: 500;
 }
+
+
+
+/* On my own CSS Attempt */
+
+.light .news-text {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #111827;
+}
+
+.dark .news-text {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.light .btn-page-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: #111827;
+}
+
+.dark .btn-page-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* .dark .page-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgb(255, 0, 242);
+    color: #d9ff00;
+} */
+
+/* .light .page-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: none;
+    background: rgb(162, 0, 255);
+    color: #d9ff00;
+} */
