@@ -1,9 +1,42 @@
 """Implementations for the Todo App frontend component."""
 
+"""Implementations for the Todo App frontend component."""
+
+# ... (keep all your existing implementations)
+
+# BEGIN NEWS IMPLEMENTATIONS
+
 impl app.fetchNews -> None {
-    result = root spawn ListMealPlan();
-    ingredients = result.reports[0] if result.reports else [];
+    has result: any = root spawn ListNews();
+    self.newsArticles = result.reports[0] if result.reports else [];
 }
+
+impl app.generateNews -> None {
+    if not self.schoolInput.trim() { return; }
+    
+    self.newsLoading = True;
+    has result: any = root spawn GenerateNews(school=self.schoolInput);
+    has article: any = result.reports[0];
+    
+    # Add new article to the beginning of the list
+    self.newsArticles = [article].concat(self.newsArticles);
+    self.schoolInput = "";
+    self.newsLoading = False;
+}
+
+impl app.deleteNewsArticle(articleId: str) -> None {
+    root spawn DeleteNews(article_id=articleId);
+    self.newsArticles = self.newsArticles.filter(
+        lambda a: any -> bool { return a.id != articleId; }
+    );
+}
+
+impl app.handleNewsKeyPress(e: any) -> None {
+    if e.key == "Enter" { self.generateNews(); }
+}
+
+# END NEWS IMPLEMENTATIONS
+
 
 impl app.togglePage -> None {
     if page == "home" {

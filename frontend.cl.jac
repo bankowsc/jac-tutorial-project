@@ -8,10 +8,17 @@ import from .components.TodoItem { TodoItem }
 import from .components.AuthForm { AuthForm }
 import from .components.IngredientItem { IngredientItem }
 
+# BEGIN NEWS IMPORT
+import from .components.NewsCard { NewsCard }
+# END NEWS IMPORT
+
 
 sv import from main {
     AddTodo, ListTodos, ToggleTodo, DeleteTodo,
-    GenerateShoppingList, ListMealPlan, ClearMealPlan
+    GenerateShoppingList, ListMealPlan, ClearMealPlan,
+    # BEGIN NEWS WALKERS
+    GenerateNews, ListNews, DeleteNews
+    # END NEWS WALKERS
 }
 
 def:pub app -> any {
@@ -27,19 +34,20 @@ def:pub app -> any {
         todosLoading: bool = True,
         mealInput: str = "",
         ingredients: list = [],
-        ingredientsLoading: bool = False;
+        ingredientsLoading: bool = False,
+        theme: str = "dark",
 
-        has theme: str = "dark"; # default dark mode
-        def toggleTheme -> None;
+        # BEGIN NEWS STATE
+        schoolInput: str = "",
+        newsArticles: list = [],
+        newsLoading: bool = False;
+        # END NEWS STATE
 
-        has page: str = "home"; # default home page
-        def togglePage -> None;
-
+    def toggleTheme -> None;
 
     can with entry {
         isLoggedIn = jacIsLoggedIn();
         checkingAuth = False;
-
         document.documentElement.className = theme;
     }
 
@@ -47,6 +55,9 @@ def:pub app -> any {
         if isLoggedIn {
             fetchTodos();
             fetchMealPlan();
+            # BEGIN NEWS LOAD
+            fetchNews();
+            # END NEWS LOAD
         }
     }
 
@@ -66,8 +77,13 @@ def:pub app -> any {
     def handleMealKeyPress(e: any) -> None;
     def getIngredientsTotal -> float;
 
+    
+    # BEGIN NEWS METHODS
     async def fetchNews -> None;
-
+    async def generateNews -> None;
+    async def deleteNewsArticle(articleId: str) -> None;
+    def handleNewsKeyPress(e: any) -> None;
+    # END NEWS METHODS
 
     if checkingAuth {
         return
@@ -79,7 +95,8 @@ def:pub app -> any {
     }
 
     if isLoggedIn {
-        totalCost = getIngredientsTotal();
+        totalCost = getIngredientsTotal() if ingredients.length > 0 else 0.0;
+
         return
             <div className="app-container">
                 <div className="app-content">
@@ -96,17 +113,6 @@ def:pub app -> any {
                                         {("Dark" if theme == "dark" else "Light")}
                                     </span>
                                 </button>
-
-                                <button
-                                    onClick={lambda -> None { togglePage(); }}
-                                    className="btn-page-toggle">
-                                    <span className="page-icon">
-                                        {("🏠" if page == "home" else "📰")}
-                                    </span>
-                                    <span className="page-label">
-                                        {("Home" if page == "home" else "News")}
-                                    </span>
-                                </button>
                             </div>
                             <div>
                                 <h1 className="app-title">TaskFlow</h1>
@@ -119,8 +125,60 @@ def:pub app -> any {
                             </button>
                         </div>
                     </div>
-
-                    {{
+                    
+                    
+                    <div className="card">
+                        <h2 className="panel-title">NCAA News Generator</h2>
+                        <p className="panel-subtitle">
+                            Generate AI news stories about your favorite NCAA school
+                        </p>
+                        <div className="add-row">
+                            <input
+                                type="text"
+                                value={schoolInput}
+                                onChange={lambda e: any -> None { schoolInput = e.target.value; }}
+                                onKeyPress={handleNewsKeyPress}
+                                placeholder="e.g. Michigan Wolverines"
+                                className="todo-input"
+                            />
+                            <button
+                                onClick={lambda -> None { generateNews(); }}
+                                disabled={newsLoading}
+                                className="btn-generate"
+                            >
+                                {("Generating..." if newsLoading else "Generate News")}
+                            </button>
+                        </div>
+                        
+                        <div className="news-container">
+                            {(
+                                <div className="loading-message">
+                                    <div className="generating-spinner"></div>
+                                    Generating news story...
+                                </div>
+                            ) if newsLoading else (
+                                <div>
+                                    {(
+                                        <div className="empty-message">
+                                            Enter a school name above to generate news.
+                                        </div>
+                                    ) if newsArticles.length == 0 else (
+                                        <div>
+                                            {[
+                                                <NewsCard
+                                                    key={article.id}
+                                                    article={article}
+                                                    onDelete={deleteNewsArticle}
+                                                /> for article in newsArticles
+                                            ]}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+    
+                    
                     <div className="two-column-layout">
                         <div className="column-left">
                             <div className="card">
@@ -152,14 +210,7 @@ def:pub app -> any {
                                             </div>
                                         ) if todos.length == 0 else (
                                             <div>
-                                                {[
-                                                    <TodoItem
-                                                        key={todo.id}
-                                                        todo={todo}
-                                                        onToggle={toggleTodo}
-                                                        onDelete={deleteTodo}
-                                                    /> for todo in todos
-                                                ]}
+                                                "TEST BAD BAD BAD"
                                             </div>
                                         )}
                                     </div>
@@ -233,21 +284,6 @@ def:pub app -> any {
                             </div>
                         </div>
                     </div>
-
-                    if page == "home" else 
-                    <div className="news-header">
-                        <div className="news-text">
-                            "Welcome to News!" 
-                        </div>
-                        <div className="news-button">
-                            <button
-                                onClick={lambda -> None { fetchNews(); }}
-                                disabled={}
-                                className="btn-news"
-                            >
-                        <div>
-                    </div>
-                    }}
                 </div>
 
             </div>;
