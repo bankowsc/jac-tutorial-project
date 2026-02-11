@@ -1,10 +1,5 @@
 """Implementations for the Todo App frontend component."""
 
-impl app.fetchNews -> None {
-    result = root spawn ListMealPlan();
-    ingredients = result.reports[0] if result.reports else [];
-}
-
 impl app.togglePage -> None {
     if page == "home" {
         page = "news";

@@ -66,9 +66,6 @@ def:pub app -> any {
     def handleMealKeyPress(e: any) -> None;
     def getIngredientsTotal -> float;
 
-    async def fetchNews -> None;
-
-
     if checkingAuth {
         return
             <div style={{"display": "flex", "justifyContent": "center",
@@ -235,17 +232,8 @@ def:pub app -> any {
                     </div>
 
                     if page == "home" else 
-                    <div className="news-header">
-                        <div className="news-text">
-                            "Welcome to News!" 
-                        </div>
-                        <div className="news-button">
-                            <button
-                                onClick={lambda -> None { fetchNews(); }}
-                                disabled={}
-                                className="btn-news"
-                            >
-                        <div>
+                    <div className="news-text">
+                        "Welcome to News!" 
                     </div>
                     }}
                 </div>
